@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "SugarSyncAPI.h"
 
 @interface ViewController ()
 
@@ -18,6 +19,15 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    //login
+    [[SugarSyncAPI sharedAPI] SSConnectWithUser:@"user" andPassword:@"pass"];
+    
+    //upload
+    [[SugarSyncAPI sharedAPI] SSUploadFile:@"aaa.zip" fromPath:@"documents path" toFolder:@"App Backup"];
+    
+    //download
+    [[SugarSyncAPI sharedAPI] SSDownloadFile:@"aaa.zip" fromFolder:@"App Backup" intoPath:@"documents path"];
 }
 
 - (void)didReceiveMemoryWarning

@@ -12,3 +12,9 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 #endif
+
+#ifdef BUILD_MODE_DEBUG
+#define YNSLog( format, args...) NSLog(format, ## args)
+#else
+#define YNSLog( format, args...)
+#endif
