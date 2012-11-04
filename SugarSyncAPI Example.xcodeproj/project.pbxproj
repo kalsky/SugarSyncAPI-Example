@@ -1,0 +1,297 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BFC127D7164734A70012B79A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC127D6164734A70012B79A /* UIKit.framework */; };
+		BFC127D9164734A70012B79A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC127D8164734A70012B79A /* Foundation.framework */; };
+		BFC127DB164734A70012B79A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC127DA164734A70012B79A /* CoreGraphics.framework */; };
+		BFC127E1164734A70012B79A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BFC127DF164734A70012B79A /* InfoPlist.strings */; };
+		BFC127E3164734A70012B79A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BFC127E2164734A70012B79A /* main.m */; };
+		BFC127E7164734A70012B79A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BFC127E6164734A70012B79A /* AppDelegate.m */; };
+		BFC127E9164734A70012B79A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BFC127E8164734A70012B79A /* Default.png */; };
+		BFC127EB164734A70012B79A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BFC127EA164734A70012B79A /* Default@2x.png */; };
+		BFC127ED164734A70012B79A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BFC127EC164734A70012B79A /* Default-568h@2x.png */; };
+		BFC127F0164734A70012B79A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFC127EF164734A70012B79A /* ViewController.m */; };
+		BFC127F3164734A70012B79A /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFC127F1164734A70012B79A /* ViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BFC127D2164734A70012B79A /* SugarSyncAPI Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SugarSyncAPI Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFC127D6164734A70012B79A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BFC127D8164734A70012B79A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BFC127DA164734A70012B79A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BFC127DE164734A70012B79A /* SugarSyncAPI Example-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SugarSyncAPI Example-Info.plist"; sourceTree = "<group>"; };
+		BFC127E0164734A70012B79A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BFC127E2164734A70012B79A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BFC127E4164734A70012B79A /* SugarSyncAPI Example-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SugarSyncAPI Example-Prefix.pch"; sourceTree = "<group>"; };
+		BFC127E5164734A70012B79A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BFC127E6164734A70012B79A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BFC127E8164734A70012B79A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		BFC127EA164734A70012B79A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		BFC127EC164734A70012B79A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		BFC127EE164734A70012B79A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		BFC127EF164734A70012B79A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		BFC127F2164734A70012B79A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BFC127CF164734A70012B79A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFC127D7164734A70012B79A /* UIKit.framework in Frameworks */,
+				BFC127D9164734A70012B79A /* Foundation.framework in Frameworks */,
+				BFC127DB164734A70012B79A /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BFC127C7164734A70012B79A = {
+			isa = PBXGroup;
+			children = (
+				BFC127DC164734A70012B79A /* SugarSyncAPI Example */,
+				BFC127D5164734A70012B79A /* Frameworks */,
+				BFC127D3164734A70012B79A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BFC127D3164734A70012B79A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BFC127D2164734A70012B79A /* SugarSyncAPI Example.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BFC127D5164734A70012B79A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BFC127D6164734A70012B79A /* UIKit.framework */,
+				BFC127D8164734A70012B79A /* Foundation.framework */,
+				BFC127DA164734A70012B79A /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BFC127DC164734A70012B79A /* SugarSyncAPI Example */ = {
+			isa = PBXGroup;
+			children = (
+				BFC127E5164734A70012B79A /* AppDelegate.h */,
+				BFC127E6164734A70012B79A /* AppDelegate.m */,
+				BFC127EE164734A70012B79A /* ViewController.h */,
+				BFC127EF164734A70012B79A /* ViewController.m */,
+				BFC127F1164734A70012B79A /* ViewController.xib */,
+				BFC127DD164734A70012B79A /* Supporting Files */,
+			);
+			path = "SugarSyncAPI Example";
+			sourceTree = "<group>";
+		};
+		BFC127DD164734A70012B79A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BFC127DE164734A70012B79A /* SugarSyncAPI Example-Info.plist */,
+				BFC127DF164734A70012B79A /* InfoPlist.strings */,
+				BFC127E2164734A70012B79A /* main.m */,
+				BFC127E4164734A70012B79A /* SugarSyncAPI Example-Prefix.pch */,
+				BFC127E8164734A70012B79A /* Default.png */,
+				BFC127EA164734A70012B79A /* Default@2x.png */,
+				BFC127EC164734A70012B79A /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BFC127D1164734A70012B79A /* SugarSyncAPI Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BFC127F6164734A70012B79A /* Build configuration list for PBXNativeTarget "SugarSyncAPI Example" */;
+			buildPhases = (
+				BFC127CE164734A70012B79A /* Sources */,
+				BFC127CF164734A70012B79A /* Frameworks */,
+				BFC127D0164734A70012B79A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SugarSyncAPI Example";
+			productName = "SugarSyncAPI Example";
+			productReference = BFC127D2164734A70012B79A /* SugarSyncAPI Example.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BFC127C9164734A70012B79A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Yaniv Kalsky";
+			};
+			buildConfigurationList = BFC127CC164734A70012B79A /* Build configuration list for PBXProject "SugarSyncAPI Example" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BFC127C7164734A70012B79A;
+			productRefGroup = BFC127D3164734A70012B79A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BFC127D1164734A70012B79A /* SugarSyncAPI Example */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BFC127D0164734A70012B79A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFC127E1164734A70012B79A /* InfoPlist.strings in Resources */,
+				BFC127E9164734A70012B79A /* Default.png in Resources */,
+				BFC127EB164734A70012B79A /* Default@2x.png in Resources */,
+				BFC127ED164734A70012B79A /* Default-568h@2x.png in Resources */,
+				BFC127F3164734A70012B79A /* ViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BFC127CE164734A70012B79A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BFC127E3164734A70012B79A /* main.m in Sources */,
+				BFC127E7164734A70012B79A /* AppDelegate.m in Sources */,
+				BFC127F0164734A70012B79A /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BFC127DF164734A70012B79A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BFC127E0164734A70012B79A /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		BFC127F1164734A70012B79A /* ViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BFC127F2164734A70012B79A /* en */,
+			);
+			name = ViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BFC127F4164734A70012B79A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		BFC127F5164734A70012B79A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BFC127F7164734A70012B79A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SugarSyncAPI Example/SugarSyncAPI Example-Prefix.pch";
+				INFOPLIST_FILE = "SugarSyncAPI Example/SugarSyncAPI Example-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		BFC127F8164734A70012B79A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SugarSyncAPI Example/SugarSyncAPI Example-Prefix.pch";
+				INFOPLIST_FILE = "SugarSyncAPI Example/SugarSyncAPI Example-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BFC127CC164734A70012B79A /* Build configuration list for PBXProject "SugarSyncAPI Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFC127F4164734A70012B79A /* Debug */,
+				BFC127F5164734A70012B79A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BFC127F6164734A70012B79A /* Build configuration list for PBXNativeTarget "SugarSyncAPI Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFC127F7164734A70012B79A /* Debug */,
+				BFC127F8164734A70012B79A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BFC127C9164734A70012B79A /* Project object */;
+}
