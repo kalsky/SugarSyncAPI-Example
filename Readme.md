@@ -1,9 +1,7 @@
 This is a small class that allows uploading and downloading a file from SugarSync in iOS.
 
 Usage:
-in SugarSync.m, update both consumerKey and consumerSecret
-#define consumerKey @"SSSSSSSSSSSSSSSSSSSSSSSSS"
-#define consumerSecret @"YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
+in SugarSync.m, update both consumerKey and consumerSecret to get access to SugarSync.
 
 Then just call these functions:
 //login
