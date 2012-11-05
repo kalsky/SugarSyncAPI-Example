@@ -11,7 +11,7 @@
 @interface SugarSyncAPI()
 
 @property (nonatomic,retain) NSString * token;
-@property (nonatomic,retain) NSString * rootFolder;
+@property (nonatomic,retain) NSString * userAgent;
 @property (nonatomic,retain) NSMutableDictionary * foldersDictionary;
 
 @end
@@ -19,13 +19,13 @@
 @implementation SugarSyncAPI
 
 @synthesize token;
-@synthesize rootFolder;
+@synthesize userAgent;
 @synthesize foldersDictionary;
 
 #define consumerKey @"SSSSSSSSSSSSSSSSSSSSSSSSS"
 #define consumerSecret @"YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
 
-static SugarSyncAPI* _sharedAPI;
+static SugarSyncAPI* _sharedAPI = nil;
 
 #pragma mark Singleton Methods
 
@@ -35,6 +35,9 @@ static SugarSyncAPI* _sharedAPI;
 		static dispatch_once_t oncePredicate;
 		dispatch_once(&oncePredicate, ^{
 			_sharedAPI = [[self alloc] init];
+            _sharedAPI.userAgent = [NSString stringWithFormat:@"%@/%@",
+                                    [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"],
+                                    [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
         });
     }
     return _sharedAPI;
@@ -49,22 +52,23 @@ static SugarSyncAPI* _sharedAPI;
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
         [request setHTTPMethod:@"GET"];
         [request addValue:self.token forHTTPHeaderField:@"Authorization"];
+        [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
         
         NSHTTPURLResponse *response = NULL;
         NSError *requestError = NULL;
         
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
         NSString *responseString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-        YNSLog(@"GetRootFolder response:%@",responseString);
+        //YNSLog(@"GetRootFolder response:%@",responseString);
         
         NSRange range = [responseString rangeOfString:@"<magicBriefcase>"];
         
         NSString *syncfolders = [responseString substringWithRange:NSMakeRange(range.location+16, [responseString length]-(range.location+16))];
-        YNSLog(@"syncfolders: %@",syncfolders);
+        //YNSLog(@"syncfolders: %@",syncfolders);
         
         range = [syncfolders rangeOfString:@"</magicBriefcase>"];
         syncfolders = [syncfolders substringWithRange:NSMakeRange(0, range.location)];
-        YNSLog(@"magicBriefcase: %@",syncfolders);
+        //YNSLog(@"magicBriefcase: %@",syncfolders);
         
         [[NSUserDefaults standardUserDefaults] setObject:syncfolders forKey:@"SSMagicBriefcaseFolderPath"];
     }
@@ -88,6 +92,7 @@ static SugarSyncAPI* _sharedAPI;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"GET"];
     [request addValue:self.token forHTTPHeaderField:@"Authorization"];
+    [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
     
     NSHTTPURLResponse *response = NULL;
     NSError *requestError = NULL;
@@ -103,7 +108,7 @@ static SugarSyncAPI* _sharedAPI;
     
     range = [collections rangeOfString:@"</collections>"];
     collections = [collections substringWithRange:NSMakeRange(0, range.location)];
-    YNSLog(@"magicBriefcase collections: %@",collections);
+    //YNSLog(@"magicBriefcase collections: %@",collections);
     
     //get the list of subfolders
     url = [NSURL URLWithString:collections];
@@ -116,7 +121,7 @@ static SugarSyncAPI* _sharedAPI;
     
     responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
     responseString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-    YNSLog(@"GetFolder list of subfolders response:%@",responseString);
+    //YNSLog(@"GetFolder list of subfolders response:%@",responseString);
     
     //get the subfolder link from the response (ref)
     range = [responseString rangeOfString:[NSString stringWithFormat:@"<displayName>%@</displayName>",folderName]];
@@ -152,6 +157,7 @@ static SugarSyncAPI* _sharedAPI;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     [request addValue:self.token forHTTPHeaderField:@"Authorization"];
+    [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
     
     NSString * str = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?><folder><displayName>%@</displayName></folder>", folderName];
     
@@ -190,6 +196,7 @@ static SugarSyncAPI* _sharedAPI;
     request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"GET"];
     [request addValue:self.token forHTTPHeaderField:@"Authorization"];
+    [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
     
     response = NULL;
     requestError = NULL;
@@ -302,6 +309,7 @@ static SugarSyncAPI* _sharedAPI;
         request = [NSMutableURLRequest requestWithURL:url];
         [request setHTTPMethod:@"POST"];
         [request addValue:self.token forHTTPHeaderField:@"Authorization"];
+        [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
         
         NSString * str = [NSString stringWithFormat:@"<file><displayName>%@</displayName><mediaType>application/octet-stream</mediaType></file>", fileName];
         
@@ -333,6 +341,7 @@ static SugarSyncAPI* _sharedAPI;
         request = [NSMutableURLRequest requestWithURL:url];
         [request setHTTPMethod:@"PUT"];
         [request addValue:self.token forHTTPHeaderField:@"Authorization"];
+        [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
         
         NSData *fileData = [NSData dataWithContentsOfFile:filePath];
         [request setHTTPBody:fileData];
@@ -381,6 +390,7 @@ static SugarSyncAPI* _sharedAPI;
     request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"GET"];
     [request addValue:self.token forHTTPHeaderField:@"Authorization"];
+    [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
     
     response = NULL;
     requestError = NULL;
