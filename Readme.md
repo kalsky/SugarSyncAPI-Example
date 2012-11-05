@@ -1,16 +1,18 @@
 This is a small class that allows uploading and downloading a file from SugarSync in iOS.
+This is also the first time I share on github - so forgive me for rookie mistakes..
 
-Usage:
+## Getting Started
 in SugarSync.m, update both consumerKey and consumerSecret to get access to SugarSync.
 
 Then just call these functions:
-//login
+
+* login
 [[SugarSyncAPI sharedAPI] SSConnectWithUser:@"user" andPassword:@"pass"];
 
-//upload
+* upload
 [[SugarSyncAPI sharedAPI] SSUploadFile:@"aaa.zip" fromPath:@"documents path" toFolder:@"App Backup"];
 
-//download
+* download
 [[SugarSyncAPI sharedAPI] SSDownloadFile:@"aaa.zip" fromFolder:@"App Backup" intoPath:@"documents path"];
 
 
