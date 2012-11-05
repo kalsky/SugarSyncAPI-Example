@@ -43,7 +43,7 @@ static SugarSyncAPI* _sharedAPI;
 #pragma mark - SugarSync API (private)
 -(NSString*)GetRootFolder
 {
-    if (self.rootFolder==nil)
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"SSMagicBriefcaseFolderPath"]==nil)
     {
         NSURL *url = [NSURL URLWithString:@"https://api.sugarsync.com/user"];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -66,10 +66,10 @@ static SugarSyncAPI* _sharedAPI;
         syncfolders = [syncfolders substringWithRange:NSMakeRange(0, range.location)];
         YNSLog(@"magicBriefcase: %@",syncfolders);
         
-        self.rootFolder = syncfolders;
+        [[NSUserDefaults standardUserDefaults] setObject:syncfolders forKey:@"SSMagicBriefcaseFolderPath"];
     }
     
-    return self.rootFolder;
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"SSMagicBriefcaseFolderPath"];
 }
 
 -(NSString*)GetFolder:(NSString*)folderName
