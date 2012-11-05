@@ -14,3 +14,7 @@ Then just call these functions:
 
 
 The files are uploaded to the MagicBriefcase folder under a sub folder that will get created.
+
+## License
+
+MIT: http://opensource.org/licenses/MIT
