@@ -12,7 +12,7 @@
 
 @property (nonatomic,retain) NSString * token;
 @property (nonatomic,retain) NSString * userAgent;
-@property (nonatomic,retain) NSMutableDictionary * foldersDictionary;
+@property (nonatomic,retain) NSMutableDictionary * fDictionary;
 
 @end
 
@@ -20,7 +20,7 @@
 
 @synthesize token;
 @synthesize userAgent;
-@synthesize foldersDictionary;
+@synthesize fDictionary;
 
 #define consumerKey @"SSSSSSSSSSSSSSSSSSSSSSSSS"
 #define consumerSecret @"YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY"
@@ -38,15 +38,26 @@ static SugarSyncAPI* _sharedAPI = nil;
             _sharedAPI.userAgent = [NSString stringWithFormat:@"%@/%@",
                                     [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"],
                                     [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
+            
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:@"SSFDictionary"]==nil)
+            {
+                _sharedAPI.fDictionary = [NSMutableDictionary dictionaryWithCapacity:3];
+            }
+            else
+            {
+                NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:@"SSFDictionary"];
+                _sharedAPI.fDictionary = [NSMutableDictionary dictionaryWithDictionary:[NSKeyedUnarchiver unarchiveObjectWithData:data]];
+            }
+            
         });
     }
     return _sharedAPI;
 }
 
 #pragma mark - SugarSync API (private)
--(NSString*)GetRootFolder
+-(NSString*)GetBriefcaseFolder
 {
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"SSMagicBriefcaseFolderPath"]==nil)
+    if ([self.fDictionary objectForKey:@"magicBriefcase"]==nil)
     {
         NSURL *url = [NSURL URLWithString:@"https://api.sugarsync.com/user"];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -59,36 +70,30 @@ static SugarSyncAPI* _sharedAPI = nil;
         
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
         NSString *responseString = [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease];
-        //YNSLog(@"GetRootFolder response:%@",responseString);
         
         NSRange range = [responseString rangeOfString:@"<magicBriefcase>"];
         
         NSString *syncfolders = [responseString substringWithRange:NSMakeRange(range.location+16, [responseString length]-(range.location+16))];
-        //YNSLog(@"syncfolders: %@",syncfolders);
         
         range = [syncfolders rangeOfString:@"</magicBriefcase>"];
         syncfolders = [syncfolders substringWithRange:NSMakeRange(0, range.location)];
-        //YNSLog(@"magicBriefcase: %@",syncfolders);
         
-        [[NSUserDefaults standardUserDefaults] setObject:syncfolders forKey:@"SSMagicBriefcaseFolderPath"];
+        [self.fDictionary setObject:syncfolders forKey:@"magicBriefcase"];
     }
     
-    return [[NSUserDefaults standardUserDefaults] objectForKey:@"SSMagicBriefcaseFolderPath"];
+    return [self.fDictionary objectForKey:@"magicBriefcase"];
 }
 
 -(NSString*)GetFolder:(NSString*)folderName
 {
-    if (self.foldersDictionary==nil)
+    YNSLog(@"GetFolder: %@",folderName);
+    if ([self.fDictionary objectForKey:folderName]!=nil)
     {
-        self.foldersDictionary = [[NSMutableDictionary alloc] init];
-    }
-    else if ([self.foldersDictionary objectForKey:folderName]!=nil)
-    {
-        return (NSString*)[self.foldersDictionary objectForKey:folderName];
+        return (NSString*)[self.fDictionary objectForKey:folderName];
     }
     
     //get info of magic folder
-    NSURL *url = [NSURL URLWithString:[self GetRootFolder]];
+    NSURL *url = [NSURL URLWithString:[self GetBriefcaseFolder]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"GET"];
     [request addValue:self.token forHTTPHeaderField:@"Authorization"];
@@ -114,7 +119,8 @@ static SugarSyncAPI* _sharedAPI = nil;
     url = [NSURL URLWithString:collections];
     request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"GET"];
-    [request addValue:token forHTTPHeaderField:@"Authorization"];
+    [request addValue:self.token forHTTPHeaderField:@"Authorization"];
+    [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
     
     response = NULL;
     requestError = NULL;
@@ -139,7 +145,7 @@ static SugarSyncAPI* _sharedAPI = nil;
     
     if (ref!=nil)
     {
-        [self.foldersDictionary setObject:ref forKey:folderName];
+        [self.fDictionary setObject:ref forKey:folderName];
     }
     
     return ref;
@@ -148,12 +154,13 @@ static SugarSyncAPI* _sharedAPI = nil;
 
 -(NSString*)CreateFolder:(NSString*)folderName
 {
-    if (self.foldersDictionary!=nil && [self.foldersDictionary objectForKey:folderName]!=nil)
+    YNSLog(@"CreateFolder: %@",folderName);
+    if ([self.fDictionary objectForKey:folderName]!=nil)
     {
-        return (NSString*)[self.foldersDictionary objectForKey:folderName];
+        return (NSString*)[self.fDictionary objectForKey:folderName];
     }
     
-    NSURL *url = [NSURL URLWithString:[self GetRootFolder]];
+    NSURL *url = [NSURL URLWithString:[self GetBriefcaseFolder]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
     [request addValue:self.token forHTTPHeaderField:@"Authorization"];
@@ -181,8 +188,9 @@ static SugarSyncAPI* _sharedAPI = nil;
     }
 }
 
--(NSString*)GetFile:(NSString*)fileName fromPath:(NSString*)folderPath
+-(NSString*)GetFilePath:(NSString*)fileName fromPath:(NSString*)folderPath
 {
+    YNSLog(@"GetFilePath: %@",fileName);
     NSURL *url;
     NSMutableURLRequest *request;
     NSHTTPURLResponse *response = NULL;
@@ -248,6 +256,7 @@ static SugarSyncAPI* _sharedAPI = nil;
 
 -(BOOL)SSConnectWithUser:(NSString*)user andPassword:(NSString*)password
 {
+    YNSLog(@"SSConnectWithUser: %@", user);
     NSURL *url = [NSURL URLWithString:@"https://api.sugarsync.com/authorization"];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"POST"];
@@ -283,58 +292,68 @@ static SugarSyncAPI* _sharedAPI = nil;
 
 -(BOOL)SSUploadFile:(NSString*)fileName fromPath:(NSString*)filePath toFolder:(NSString*)folderName
 {
+    YNSLog(@"SSUploadFile: %@", fileName);
     NSURL *url;
     NSMutableURLRequest *request;
     NSHTTPURLResponse *response = NULL;
     NSError *requestError = NULL;
-    
     NSString * SSFilePath = nil;
+    BOOL retVal = YES;
     
-    NSString * folderPath = [self GetFolder:folderName];
-    if (folderPath==nil) 
+    NSString * fileKey = [NSString stringWithFormat:@"%@/%@",folderName,fileName];
+    if ([self.fDictionary objectForKey:fileKey]!=nil)
     {
-        //create folder
-        folderPath = [self CreateFolder:folderName];
-    }
-    else
-    {
-        //try to get the file link
-        SSFilePath = [self GetFile:fileName fromPath:folderPath];
+        SSFilePath = (NSString*)[self.fDictionary objectForKey:fileKey];
     }
     
     if (SSFilePath==nil)
     {
-        //create file
-        url = [NSURL URLWithString:folderName];
-        request = [NSMutableURLRequest requestWithURL:url];
-        [request setHTTPMethod:@"POST"];
-        [request addValue:self.token forHTTPHeaderField:@"Authorization"];
-        [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
-        
-        NSString * str = [NSString stringWithFormat:@"<file><displayName>%@</displayName><mediaType>application/octet-stream</mediaType></file>", fileName];
-        
-        [request setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-        [request setHTTPBody:[str dataUsingEncoding:NSUTF8StringEncoding]];
-        
-        response = NULL;
-        requestError = NULL;
-        
-        [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
-        
-        if ([response respondsToSelector:@selector(allHeaderFields)]) {
-            NSDictionary *dictionary = [response allHeaderFields];
-            SSFilePath = [dictionary objectForKey:@"Location"];
-            YNSLog(@"response code: %d",[response statusCode]);
-        }
-        else if (requestError!=NULL)
+        NSString * folderPath = [self GetFolder:folderName];
+        if (folderPath==nil)
         {
-            YNSLog(@"error: %@", [requestError description]);
-            return NO;
+            //create folder
+            folderPath = [self CreateFolder:folderName];
+        }
+        else
+        {
+            //try to get the file link
+            SSFilePath = [self GetFilePath:fileName fromPath:folderPath];
+        }
+        
+        if (SSFilePath==nil)
+        {
+            //create file
+            url = [NSURL URLWithString:folderPath];
+            request = [NSMutableURLRequest requestWithURL:url];
+            [request setHTTPMethod:@"POST"];
+            [request addValue:self.token forHTTPHeaderField:@"Authorization"];
+            [request setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];
+            
+            NSString * str = [NSString stringWithFormat:@"<file><displayName>%@</displayName><mediaType>application/octet-stream</mediaType></file>", fileName];
+            
+            [request setValue:@"application/xml; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+            [request setHTTPBody:[str dataUsingEncoding:NSUTF8StringEncoding]];
+            
+            response = NULL;
+            requestError = NULL;
+            
+            [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
+            YNSLog(@"response code: %d",[response statusCode]);
+            
+            if ([response statusCode]<300 && [response respondsToSelector:@selector(allHeaderFields)]) {
+                NSDictionary *dictionary = [response allHeaderFields];
+                SSFilePath = [dictionary objectForKey:@"Location"];
+            }
+            else
+            {
+                YNSLog(@"error: %@", [requestError description]);
+                retVal = NO;
+            }
         }
     }
     
     //upload file
-    if (SSFilePath)
+    if (SSFilePath!=nil)
     {
         url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/data",SSFilePath]];
         
@@ -350,43 +369,67 @@ static SugarSyncAPI* _sharedAPI = nil;
         
         requestError = NULL;
         [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
+        YNSLog(@"response code: %d",[response statusCode]);
         
-        if (requestError!=NULL)
+        if ([response statusCode]>=300 || requestError!=NULL)
         {
-            YNSLog(@"error: %@", [requestError description]);
-            return NO;
+            if ([response statusCode]==404)
+            {
+                //try again without the cached file path
+                _sharedAPI.fDictionary = [NSMutableDictionary dictionaryWithCapacity:3];
+                return [self SSUploadFile:fileName fromPath:filePath toFolder:folderName];
+            }
+            else
+            {
+                YNSLog(@"error: %@", [requestError description]);
+                retVal = NO;
+            }
         }
     }
     
-    return YES;
+    if (retVal==YES)
+    {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [self.fDictionary setObject:SSFilePath forKey:fileKey];
+        [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:self.fDictionary] forKey:@"SSFDictionary"];
+    }
+    return retVal;
 }
 
 -(BOOL)SSDownloadFile:(NSString*)fileName fromFolder:(NSString*)folderName intoPath:(NSString*)savePath
 {
+    YNSLog(@"SSDownloadFile: %@", fileName);
     NSURL *url;
     NSMutableURLRequest *request;
     NSHTTPURLResponse *response = NULL;
     NSError *requestError = NULL;
     NSData *responseData;
+    NSString * SSFilePath = nil;
     
-    NSString * folderPath = [self GetFolder:folderName];
-    if (folderPath==nil)
+    NSString * fileKey = [NSString stringWithFormat:@"%@/%@",folderName,fileName];
+    if ([self.fDictionary objectForKey:fileKey]!=nil)
     {
-        //folder does not exist
-        return NO;
+        SSFilePath = (NSString*)[self.fDictionary objectForKey:fileKey];
     }
-    
-    NSString * filePath = [self GetFile:fileName fromPath:folderPath];
-    
-    if (filePath==nil)
+    else
     {
-        return NO;
+        NSString * folderPath = [self GetFolder:folderName];
+        if (folderPath==nil)
+        {
+            //folder does not exist
+            return NO;
+        }
+        
+        SSFilePath = [self GetFilePath:fileName fromPath:folderPath];
+        
+        if (SSFilePath==nil)
+        {
+            return NO;
+        }
     }
-    
-    NSString * SSFilePath = [NSString stringWithFormat:@"%@/data",filePath];
     
     //get info of backup folder
-    url = [NSURL URLWithString:SSFilePath];
+    url = [NSURL URLWithString:[NSString stringWithFormat:@"%@/data",SSFilePath]];
     request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"GET"];
     [request addValue:self.token forHTTPHeaderField:@"Authorization"];
@@ -397,10 +440,18 @@ static SugarSyncAPI* _sharedAPI = nil;
     
     responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
     YNSLog(@"SSDownloadFile responseData size:%d",[responseData length]);
-    if ([responseData length]>0)
+    YNSLog(@"response code: %d",[response statusCode]);
+    
+    if ([response statusCode]<300 && [responseData length]>0)
     {
         //save the file
         return [responseData writeToFile:savePath atomically:YES];
+    }
+    else if ([response statusCode]==404)
+    {
+        //try again without the cached file path
+        _sharedAPI.fDictionary = [NSMutableDictionary dictionaryWithCapacity:3];
+        return [self SSDownloadFile:fileName fromFolder:folderName intoPath:savePath];
     }
     else
     {
